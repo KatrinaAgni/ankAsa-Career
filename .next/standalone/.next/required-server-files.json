@@ -97,7 +97,7 @@
         "transform": "lodash/{{member}}"
       }
     },
-    "outputFileTracingRoot": "D:\\KULIAH\\IT FEST\\ankasa-career",
+    "outputFileTracingRoot": "D:\\KULIAH\\SMT 5\\TECHNOPRENEURSHIP\\ankAsa-Career",
     "experimental": {
       "nodeMiddleware": false,
       "cacheLife": {
@@ -280,10 +280,10 @@
     "bundlePagesRouterDependencies": false,
     "configFileName": "next.config.ts",
     "turbopack": {
-      "root": "D:\\KULIAH\\IT FEST\\ankasa-career"
+      "root": "D:\\KULIAH\\SMT 5\\TECHNOPRENEURSHIP\\ankAsa-Career"
     }
   },
-  "appDir": "D:\\KULIAH\\IT FEST\\ankasa-career",
+  "appDir": "D:\\KULIAH\\SMT 5\\TECHNOPRENEURSHIP\\ankAsa-Career",
   "relativeAppDir": "",
   "files": [
     ".next\\routes-manifest.json",

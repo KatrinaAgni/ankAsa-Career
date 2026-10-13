@@ -1,7 +1,14 @@
 {
-  "/favicon.ico/route": "/favicon.ico",
-  "/api/analyze/route": "/api/analyze",
-  "/_not-found/page": "/_not-found",
   "/api/build/route": "/api/build",
-  "/page": "/"
+  "/api/analyze/route": "/api/analyze",
+  "/favicon.ico/route": "/favicon.ico",
+  "/_not-found/page": "/_not-found",
+  "/career/archive/page": "/career/archive",
+  "/career/page": "/career",
+  "/career/jobs/page": "/career/jobs",
+  "/page": "/",
+  "/study/conference/page": "/study/conference",
+  "/study/catalog/page": "/study/catalog",
+  "/study/design/page": "/study/design",
+  "/study/page": "/study"
 }

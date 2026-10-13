@@ -1,4 +1,4 @@
-// File: D:\KULIAH\IT FEST\ankasa-career\src\app\api\analyze\route.ts
+// File: D:\KULIAH\SMT 5\TECHNOPRENEURSHIP\ankAsa-Career\src\app\api\analyze\route.ts
 import * as entry from '../../../../../src/app/api/analyze/route.js'
 import type { NextRequest } from 'next/server.js'
 
