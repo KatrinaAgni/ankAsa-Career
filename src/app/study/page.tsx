@@ -18,38 +18,64 @@ export default function StudyPage() {
       </header>
 
       <main className="container mx-auto max-w-6xl px-4 py-12 relative z-10">
-        <div className="mb-12">
+        <div className="mb-12 text-center md:text-left">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-rose-100 text-rose-800 text-xs font-bold uppercase tracking-wider mb-4">
             <GraduationCap className="w-4 h-4" /> Ankasa Study
           </div>
           <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight">Katalog Edukasi & Layanan</h1>
-          <p className="text-lg text-gray-600 mt-4 max-w-2xl">
-            Semua kebutuhan akademikmu ada di sini. Mulai dari pemesanan jasa desain, pengunduhan template, hingga *update* Conference.
+          <p className="text-lg text-gray-600 mt-4 max-w-2xl mx-auto md:mx-0">
+            Semua kebutuhan akademikmu ada di sini. Mulai dari pemesanan jasa desain, pengunduhan template, hingga update Conference nasional dan internasional.
           </p>
         </div>
 
         {/* Grid interaktif untuk jasa Study */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-           <div className="bg-white/80 p-8 rounded-[2rem] border border-gray-100 shadow-sm text-center">
+           
+           {/* Kartu Jasa Desain */}
+           <div className="bg-white/80 p-8 rounded-[2rem] border border-gray-100 shadow-sm text-center flex flex-col">
              <PenTool className="w-12 h-12 text-amber-500 mx-auto mb-4" />
              <h3 className="font-bold text-xl">Pesan Jasa Desain</h3>
-             <p className="text-sm text-gray-500 mt-2 mb-6">Formulir pemesanan desain poster, presentasi, dan makalah.</p>
-             <button className="w-full py-2 bg-amber-100 text-amber-700 rounded-xl font-bold hover:bg-amber-200">Form Pemesanan</button>
+             <p className="text-sm text-gray-500 mt-2 mb-6 flex-grow">
+               Formulir pemesanan untuk desain visual poster presentasi, seminar, dan layout makalah profesional.
+             </p>
+             <Link 
+               href="/study/design" 
+               className="w-full py-3 bg-amber-100 text-amber-700 rounded-xl font-bold hover:bg-amber-200 transition-colors inline-block text-center"
+             >
+               Form Pemesanan
+             </Link>
            </div>
            
-           <div className="bg-white/80 p-8 rounded-[2rem] border border-gray-100 shadow-sm text-center">
+           {/* Kartu Info Conference */}
+           <div className="bg-white/80 p-8 rounded-[2rem] border border-gray-100 shadow-sm text-center flex flex-col">
              <Globe className="w-12 h-12 text-blue-500 mx-auto mb-4" />
              <h3 className="font-bold text-xl">Info Conference</h3>
-             <p className="text-sm text-gray-500 mt-2 mb-6">Daftar Call for Papers dan pendaftaran seminar internasional.</p>
-             <button className="w-full py-2 bg-blue-100 text-blue-700 rounded-xl font-bold hover:bg-blue-200">Lihat Jadwal</button>
+             <p className="text-sm text-gray-500 mt-2 mb-6 flex-grow">
+               Daftar pengumuman Call for Papers terbaru dan pendaftaran agenda seminar tingkat nasional hingga internasional.
+             </p>
+             <Link 
+               href="/study/conference" 
+               className="w-full py-3 bg-blue-100 text-blue-700 rounded-xl font-bold hover:bg-blue-200 transition-colors inline-block text-center"
+             >
+               Lihat Jadwal
+             </Link>
            </div>
 
-           <div className="bg-white/80 p-8 rounded-[2rem] border border-gray-100 shadow-sm text-center">
+           {/* Kartu Perpustakaan Materi */}
+           <div className="bg-white/80 p-8 rounded-[2rem] border border-gray-100 shadow-sm text-center flex flex-col">
              <BookOpen className="w-12 h-12 text-emerald-500 mx-auto mb-4" />
              <h3 className="font-bold text-xl">Perpustakaan Materi</h3>
-             <p className="text-sm text-gray-500 mt-2 mb-6">Beli atau unduh gratis materi dan template dokumen.</p>
-             <button className="w-full py-2 bg-emerald-100 text-emerald-700 rounded-xl font-bold hover:bg-emerald-200">Buka Katalog</button>
+             <p className="text-sm text-gray-500 mt-2 mb-6 flex-grow">
+               Katalog e-book terpadu, rangkuman materi perkuliahan, dan template dokumen akademik yang siap diunduh.
+             </p>
+             <Link 
+               href="/study/catalog" 
+               className="w-full py-3 bg-emerald-100 text-emerald-700 rounded-xl font-bold hover:bg-emerald-200 transition-colors inline-block text-center"
+             >
+               Buka Katalog
+             </Link>
            </div>
+
         </div>
       </main>
     </div>
