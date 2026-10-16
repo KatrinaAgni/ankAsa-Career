@@ -4,16 +4,19 @@ import { useState, useEffect } from "react"
 import { 
   Briefcase, ArrowLeft, Search, FilePlus2, 
   Archive, FileText, LayoutTemplate, MessageSquareText,
-  MapPin, DollarSign, Filter, Link as LinkIcon, Send, Lock
+  MapPin, DollarSign, Filter, Link as LinkIcon, Send, Lock, Menu, X, PanelLeftClose, PanelLeftOpen
 } from "lucide-react"
 import Link from "next/link"
-import { supabase } from "@/lib/supabase" // Import koneksi Supabase
+import { supabase } from "@/lib/supabase" // Pastikan Supabase sudah terhubung
 
 export default function CareerPage() {
   const [activeMenu, setActiveMenu] = useState("loker")
   const [selectedJob, setSelectedJob] = useState<any | null>(null)
   
-  // State untuk menyimpan data dari database
+  // State untuk Hide/Show Sidebar
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true)
+  
+  // State untuk data dari database
   const [lokers, setLokers] = useState<any[]>([])
   
   // State untuk filter pencarian
@@ -21,7 +24,6 @@ export default function CareerPage() {
   const [filterJenis, setFilterJenis] = useState("Semua")
   const [searchPosisi, setSearchPosisi] = useState("")
 
-  // Mengambil data loker dari Supabase saat halaman dimuat
   useEffect(() => {
     const fetchLokers = async () => {
       const { data, error } = await supabase
@@ -36,7 +38,6 @@ export default function CareerPage() {
     fetchLokers();
   }, []);
 
-  // Logika Filter
   const filteredLokers = lokers.filter((loker) => {
     const matchLokasi = filterLokasi === "Semua" || loker.lokasi?.toLowerCase().includes(filterLokasi.toLowerCase());
     const matchJenis = filterJenis === "Semua" || loker.jenis?.toLowerCase().includes(filterJenis.toLowerCase());
@@ -47,19 +48,29 @@ export default function CareerPage() {
   return (
     <div className="min-h-screen bg-[#FDFBF7] text-gray-800 flex flex-col font-sans">
       <header className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white/80 backdrop-blur-md">
-        <div className="container mx-auto flex h-14 items-center px-4 md:px-6">
+        <div className="container mx-auto flex h-14 items-center px-4 md:px-6 gap-4">
           <Link href="/" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 font-bold transition-colors">
-            <ArrowLeft className="w-5 h-5" /> Kembali ke Beranda
+            <ArrowLeft className="w-5 h-5" /> <span className="hidden sm:inline">Beranda</span>
           </Link>
+          <div className="w-px h-5 bg-gray-300 mx-2"></div>
+          
+          {/* Tombol Toggle Sidebar */}
+          <button 
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            className="flex items-center gap-2 text-blue-600 bg-blue-50 px-3 py-1.5 rounded-lg hover:bg-blue-100 transition-colors font-bold text-sm"
+          >
+            {isSidebarOpen ? <PanelLeftClose className="w-4 h-4" /> : <PanelLeftOpen className="w-4 h-4" />}
+            <span className="hidden sm:inline">{isSidebarOpen ? "Tutup Menu" : "Buka Menu"}</span>
+          </button>
         </div>
       </header>
 
-      <div className="flex-grow container mx-auto px-4 py-8 flex flex-col md:flex-row gap-6 max-w-7xl">
+      <div className="flex-grow container mx-auto px-4 py-8 flex flex-col md:flex-row gap-6 max-w-7xl transition-all duration-300">
         
-        {/* SIDEBAR */}
-        <aside className="w-full md:w-64 shrink-0">
-          <div className="sticky top-24 bg-white/60 backdrop-blur-md border border-white/80 shadow-sm rounded-3xl p-5">
-            <div className="mb-6 px-2">
+        {/* SIDEBAR (HIDEABLE) */}
+        <aside className={`${isSidebarOpen ? 'w-full md:w-64 opacity-100' : 'w-0 overflow-hidden opacity-0 p-0 m-0 border-0'} shrink-0 transition-all duration-300 ease-in-out`}>
+          <div className="sticky top-24 bg-white/60 backdrop-blur-md border border-white/80 shadow-sm rounded-3xl p-5 w-full md:w-64">
+            <div className="mb-6 px-2 flex justify-between items-center">
               <h2 className="text-xl font-extrabold text-gray-900">Ankasa Career</h2>
             </div>
             
@@ -78,22 +89,20 @@ export default function CareerPage() {
                 <Archive className="w-5 h-5" /> Arsip Digital
               </button>
               <button onClick={() => setActiveMenu("publikasi")} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all ${activeMenu === "publikasi" ? "bg-amber-500 text-white shadow-md" : "text-gray-600 hover:bg-white"}`}>
-                <MessageSquareText className="w-5 h-5" /> Publikasi
+                <MessageSquareText className="w-5 h-5" /> Publikasi Artikel
               </button>
             </nav>
           </div>
         </aside>
 
-        {/* KONTEN */}
-        <main className="flex-1 min-w-0">
+        {/* KONTEN UTAMA */}
+        <main className="flex-1 min-w-0 transition-all duration-300">
           <div className="bg-white/70 backdrop-blur-xl border border-white shadow-sm rounded-[2rem] p-6 md:p-8 min-h-[75vh]">
             
-            {/* 1. LOKER (TERHUBUNG SUPABASE) */}
             {activeMenu === "loker" && (
               <div className="animate-in fade-in duration-300">
                 <h2 className="text-2xl font-extrabold mb-4">Portal Lowongan & MBKM</h2>
                 
-                {/* Filter Bar */}
                 <div className="bg-white p-4 rounded-2xl border border-gray-200 mb-6 flex flex-wrap gap-3 items-center">
                    <Filter className="w-5 h-5 text-gray-400" />
                    <select value={filterLokasi} onChange={(e) => setFilterLokasi(e.target.value)} className="bg-gray-50 border border-gray-200 text-sm rounded-lg px-3 py-2 outline-none">
@@ -105,7 +114,6 @@ export default function CareerPage() {
                    <input type="text" value={searchPosisi} onChange={(e) => setSearchPosisi(e.target.value)} placeholder="Posisi (Cth: Admin)" className="bg-gray-50 border border-gray-200 text-sm rounded-lg px-3 py-2 outline-none flex-grow" />
                 </div>
 
-                {/* Tampilan Detail / List */}
                 {selectedJob ? (
                   <div className="bg-white border border-gray-200 p-6 rounded-2xl">
                     <button onClick={() => setSelectedJob(null)} className="text-sm font-bold text-blue-600 mb-4">&larr; Kembali ke daftar</button>
@@ -131,9 +139,9 @@ export default function CareerPage() {
                 ) : (
                   <div className="space-y-4">
                     {lokers.length === 0 ? (
-                      <div className="text-center py-10 text-gray-500">Memuat data loker dari database... (atau data masih kosong)</div>
+                      <div className="text-center py-10 text-gray-500">Memuat data loker dari database...</div>
                     ) : filteredLokers.length === 0 ? (
-                      <div className="text-center py-10 text-gray-500">Tidak ada loker yang sesuai dengan filter.</div>
+                      <div className="text-center py-10 text-gray-500">Tidak ada loker yang sesuai filter.</div>
                     ) : (
                       filteredLokers.map((loker) => (
                         <div key={loker.id} onClick={() => setSelectedJob(loker)} className="bg-white p-5 border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-all cursor-pointer flex gap-4 items-center">
@@ -154,7 +162,7 @@ export default function CareerPage() {
               </div>
             )}
 
-            {/* Menu Lainnya (CV AI, Portofolio, Arsip, Publikasi) sama seperti sebelumnya */}
+            {/* Konten Menu Lain (Sama) */}
             {activeMenu === "cv_ai" && (
               <div className="animate-in fade-in duration-300">
                 <div className="flex justify-between items-start mb-6">
@@ -174,7 +182,7 @@ export default function CareerPage() {
                     <button className="bg-blue-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700 shadow-sm">
                       Mulai Generate CV AI
                     </button>
-                    <Link href="/harga" className="text-xs text-blue-600 mt-4 font-bold hover:underline">Upgrade ke Career Pro untuk Unlimited</Link>
+                    <Link href="/harga" className="text-xs text-blue-600 mt-4 font-bold hover:underline">Upgrade ke Career Pro</Link>
                   </div>
                 </div>
               </div>
@@ -187,12 +195,12 @@ export default function CareerPage() {
                 <div className="bg-white border border-gray-200 p-6 rounded-2xl space-y-4">
                   <div>
                     <label className="block text-sm font-bold mb-2">Link Google Drive (Folder Karya)</label>
-                    <div className="flex items-center bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 focus-within:border-blue-400">
+                    <div className="flex items-center bg-gray-50 border border-gray-200 rounded-xl px-3 py-2">
                       <LinkIcon className="w-4 h-4 text-gray-400 mr-2" />
                       <input type="text" placeholder="https://drive.google.com/..." className="bg-transparent w-full outline-none text-sm" />
                     </div>
                   </div>
-                  <a href="https://wa.me/6282112345678?text=Halo%20Admin,%20saya%20ingin%20membuat%20portofolio." target="_blank" className="block text-center bg-gray-900 text-white font-bold py-3 px-6 rounded-xl w-full hover:bg-gray-800">Kirim ke WA Admin</a>
+                  <a href="https://wa.me/6282112345678" target="_blank" className="block text-center bg-gray-900 text-white font-bold py-3 px-6 rounded-xl w-full">Kirim ke WA Admin</a>
                 </div>
               </div>
             )}
@@ -200,18 +208,16 @@ export default function CareerPage() {
             {activeMenu === "arsip" && (
               <div className="animate-in fade-in duration-300">
                 <h2 className="text-2xl font-extrabold mb-2">Jasa Kelola Arsip Digital</h2>
-                <p className="text-gray-500 text-sm mb-6">Kirimkan link Drive dokumen, kami rapikan dan kirim file ZIP-nya via WhatsApp.</p>
+                <p className="text-gray-500 text-sm mb-6">Kirimkan link Drive, kami rapikan dan kirim file ZIP-nya via WhatsApp.</p>
                 <div className="bg-amber-50 border border-amber-200 p-6 rounded-2xl space-y-4">
                   <div>
                     <label className="block text-sm font-bold text-amber-900 mb-2">Link Google Drive</label>
-                    <div className="flex items-center bg-white border border-amber-200 rounded-xl px-3 py-2 focus-within:border-amber-400">
+                    <div className="flex items-center bg-white border border-amber-200 rounded-xl px-3 py-2">
                       <LinkIcon className="w-4 h-4 text-amber-500 mr-2" />
                       <input type="text" placeholder="Masukkan link folder Drive..." className="bg-transparent w-full outline-none text-sm" />
                     </div>
                   </div>
-                  <a href="https://wa.me/6282112345678?text=Halo%20Admin,%20tolong%20buatkan%20ZIP%20untuk%20arsip%20saya." target="_blank" className="block text-center bg-amber-500 text-white font-bold py-3 px-6 rounded-xl w-full hover:bg-amber-600">
-                    Minta File ZIP via WA
-                  </a>
+                  <a href="https://wa.me/6282112345678" target="_blank" className="block text-center bg-amber-500 text-white font-bold py-3 px-6 rounded-xl w-full">Minta File ZIP via WA</a>
                 </div>
               </div>
             )}
@@ -228,7 +234,7 @@ export default function CareerPage() {
                     <label className="block text-sm font-bold mb-2">Ide Spesifik</label>
                     <textarea rows={3} placeholder="Jelaskan gagasan artikel..." className="w-full bg-gray-50 border border-gray-200 p-3 rounded-xl text-sm outline-none"></textarea>
                   </div>
-                  <a href="https://wa.me/6282112345678" target="_blank" className="block text-center bg-green-600 text-white font-bold py-3 rounded-xl hover:bg-green-700">Konsultasi via WA</a>
+                  <a href="https://wa.me/6282112345678" target="_blank" className="block text-center bg-green-600 text-white font-bold py-3 rounded-xl">Konsultasi via WA</a>
                 </div>
               </div>
             )}
