@@ -64,10 +64,10 @@ export default function StudyPage() {
            {/* Kartu Perpustakaan Materi */}
            <div className="bg-white/80 p-8 rounded-[2rem] border border-gray-100 shadow-sm text-center flex flex-col">
              <BookOpen className="w-12 h-12 text-emerald-500 mx-auto mb-4" />
-             <h3 className="font-bold text-xl">Perpustakaan Materi</h3>
-             <p className="text-sm text-gray-500 mt-2 mb-6 flex-grow">
-               Katalog e-book terpadu, rangkuman materi perkuliahan, dan template dokumen akademik yang siap diunduh.
-             </p>
+              <h3 className="font-bold text-xl">Perpustakaan Materi</h3>
+              <p className="text-sm text-gray-500 mt-2 mb-6 flex-grow">
+                Contoh e-book & modul, plus jasa pembuatan buku custom sesuai kebutuhanmu.
+              </p>
              <Link 
                href="/study/catalog" 
                className="w-full py-3 bg-emerald-100 text-emerald-700 rounded-xl font-bold hover:bg-emerald-200 transition-colors inline-block text-center"
