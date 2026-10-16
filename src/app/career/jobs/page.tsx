@@ -1,5 +1,9 @@
+"use client"
+
 import { ArrowLeft, Search, MapPin, Mail, CalendarDays } from "lucide-react"
 import Link from "next/link"
+import { useEffect, useState } from "react"
+import { supabase } from "@/lib/supabase"
 
 type Loker = {
   id: number
@@ -12,6 +16,7 @@ type Loker = {
   jadwal: string
   syarat: string[]
   logo: string
+  link: string
 }
 
 const daftarLoker: Loker[] = [
@@ -31,6 +36,7 @@ const daftarLoker: Loker[] = [
       "Belum pernah mengikuti Program Pemagangan Nasional.",
     ],
     logo: "KM",
+    link: "https://maganghub.kemnaker.go.id/",
   },
   {
     id: 2,
@@ -48,6 +54,7 @@ const daftarLoker: Loker[] = [
       "Rekrutmen resmi tidak dipungut biaya.",
     ],
     logo: "PR",
+    link: "https://recruitment.pertamina.com/",
   },
   {
     id: 3,
@@ -65,6 +72,7 @@ const daftarLoker: Loker[] = [
       "5 posisi: Wholesale Banking, Risk Management, Micro Banking, Business Enabler, Audit.",
     ],
     logo: "BR",
+    link: "https://e-recruitment.bri.co.id/",
   },
   {
     id: 4,
@@ -81,6 +89,7 @@ const daftarLoker: Loker[] = [
       "Bersedia ditempatkan di seluruh Unit Kerja BRI Region 10.",
     ],
     logo: "BR",
+    link: "https://e-recruitment.bri.co.id/",
   },
   {
     id: 5,
@@ -98,6 +107,7 @@ const daftarLoker: Loker[] = [
       "1 posisi tersedia.",
     ],
     logo: "KF",
+    link: "https://rekrutmen.kimiafarma.co.id/",
   },
   {
     id: 6,
@@ -114,6 +124,7 @@ const daftarLoker: Loker[] = [
       "1 posisi tersedia.",
     ],
     logo: "KF",
+    link: "https://rekrutmen.kimiafarma.co.id/",
   },
   {
     id: 7,
@@ -130,6 +141,7 @@ const daftarLoker: Loker[] = [
       "Pendaftaran melalui platform Magenta.",
     ],
     logo: "PI",
+    link: "https://www.magentaku.id/",
   },
   {
     id: 8,
@@ -146,6 +158,7 @@ const daftarLoker: Loker[] = [
       "Pendaftaran melalui platform Magenta.",
     ],
     logo: "BK",
+    link: "https://www.magentaku.id/",
   },
   {
     id: 9,
@@ -160,9 +173,9 @@ const daftarLoker: Loker[] = [
       "Lulusan D1 atau sederajat, mahasiswa tingkat akhir semua jurusan.",
       "Usia minimal 21 tahun, maksimal 27 tahun.",
       "Memiliki kemampuan komunikasi yang baik.",
-      "Tertarik pada dunia bisnis, investasi, pasar modal, atau pemasaran.",
     ],
     logo: "VB",
+    link: "https://id.indeed.com/",
   },
   {
     id: 10,
@@ -179,6 +192,7 @@ const daftarLoker: Loker[] = [
       "Membangun model prediktif estimasi suplai dan permintaan komoditas (expert advisor).",
     ],
     logo: "VB",
+    link: "https://id.indeed.com/",
   },
   {
     id: 11,
@@ -195,6 +209,7 @@ const daftarLoker: Loker[] = [
       "Membawa surat izin resmi dari kampus.",
     ],
     logo: "SD",
+    link: "https://www.soocadesign.com/",
   },
   {
     id: 12,
@@ -209,9 +224,9 @@ const daftarLoker: Loker[] = [
       "Lulusan S1 Teknik Informatika/Sistem Informasi atau semester akhir.",
       "Mampu troubleshooting PC, laptop, CCTV, dan printer.",
       "Terbiasa menggunakan Excel atau Google Sheets.",
-      "Bersedia internship 6 bulan di Joglo, Jakarta Barat.",
     ],
     logo: "BD",
+    link: "https://id.indeed.com/",
   },
   {
     id: 13,
@@ -228,6 +243,7 @@ const daftarLoker: Loker[] = [
       "Penempatan di Semarang.",
     ],
     logo: "IT",
+    link: "https://glints.com/id/",
   },
   {
     id: 14,
@@ -244,6 +260,7 @@ const daftarLoker: Loker[] = [
       "Magang onsite di Depok.",
     ],
     logo: "ST",
+    link: "https://glints.com/id/",
   },
   {
     id: 15,
@@ -260,6 +277,7 @@ const daftarLoker: Loker[] = [
       "Bekerja secara hybrid dari Bandung.",
     ],
     logo: "RT",
+    link: "https://glints.com/id/",
   },
   {
     id: 16,
@@ -277,10 +295,45 @@ const daftarLoker: Loker[] = [
       "Pendaftaran melalui portal MagangHub.",
     ],
     logo: "KD",
+    link: "https://maganghub.kemnaker.go.id/",
   },
 ]
 
 export default function JobsPage() {
+  const [lokerList, setLokerList] = useState<Loker[]>(daftarLoker)
+
+  useEffect(() => {
+    let aktif = true
+    supabase
+      .from("loker")
+      .select("*")
+      .order("id", { ascending: true })
+      .then(({ data, error }) => {
+        if (!aktif || error || !data || data.length === 0) return
+        const hasil: Loker[] = data.map((row: Record<string, unknown>, i: number) => ({
+          id: (row.id as number) ?? i + 1,
+          posisi: (row.posisi as string) ?? "",
+          perusahaan: (row.perusahaan as string) ?? "",
+          lokasi: (row.lokasi as string) ?? "",
+          jenis: (row.jenis as Loker["jenis"]) ?? "Magang",
+          gaji: (row.gaji as string) ?? "Tidak dicantumkan",
+          kontak: (row.kontak as string) ?? "",
+          jadwal: (row.jadwal as string) ?? "Tidak dicantumkan",
+          syarat: Array.isArray(row.syarat)
+            ? (row.syarat as string[])
+            : row.syarat
+              ? [String(row.syarat)]
+              : [],
+          logo: (row.logo as string) ?? "?",
+          link: (row.link as string) ?? "",
+        }))
+        setLokerList(hasil)
+      })
+    return () => {
+      aktif = false
+    }
+  }, [])
+
   return (
     <div className="min-h-screen bg-[#FDFBF7] text-gray-800 font-sans">
       <header className="sticky top-0 z-50 w-full border-b border-white/60 bg-white/60 backdrop-blur-xl">
@@ -297,7 +350,7 @@ export default function JobsPage() {
            <button className="bg-blue-600 text-white px-6 py-3 rounded-xl font-bold">Cari</button>
         </div>
         <div className="grid md:grid-cols-2 gap-4">
-           {daftarLoker.map((loker) => (
+           {lokerList.map((loker) => (
              <div key={loker.id} className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
                <div className="flex items-start justify-between gap-3 mb-4">
                  <div className="flex items-center gap-3">
@@ -310,15 +363,20 @@ export default function JobsPage() {
                  <span className="shrink-0 text-[11px] font-bold px-2 py-1 rounded-full bg-gray-100 text-gray-600">{loker.jenis}</span>
                </div>
                <div className="flex gap-2 text-xs text-gray-500 mb-3"><MapPin className="w-4 h-4 shrink-0"/> {loker.lokasi}</div>
-               <p className="text-sm font-bold text-emerald-600 mb-3">{loker.gaji}</p>
+                <p className="text-sm mb-3"><span className="font-semibold text-gray-500">Gaji:</span> <span className="font-bold text-emerald-600">{loker.gaji}</span></p>
                <ul className="space-y-1 mb-4">
-                 {loker.syarat.slice(0, 3).map((syarat) => (
+                 {(loker.syarat ?? []).slice(0, 3).map((syarat) => (
                    <li key={syarat} className="text-xs text-gray-500 flex gap-2"><span>•</span> {syarat}</li>
                  ))}
                </ul>
                <div className="flex flex-col gap-1 text-xs text-gray-500 border-t border-gray-100 pt-3">
-                 <span className="flex items-center gap-2"><CalendarDays className="w-4 h-4 shrink-0"/> {loker.jadwal}</span>
-                 <span className="flex items-center gap-2"><Mail className="w-4 h-4 shrink-0"/> {loker.kontak}</span>
+                  <span className="flex items-center gap-2"><CalendarDays className="w-4 h-4 shrink-0"/> <span><span className="font-semibold text-gray-600">Jadwal:</span> {loker.jadwal}</span></span>
+                  <span className="flex items-center gap-2"><Mail className="w-4 h-4 shrink-0"/> <span><span className="font-semibold text-gray-600">Kontak:</span> {loker.kontak}</span></span>
+                 {loker.link && (
+                   <a href={loker.link} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 font-semibold">
+                     Lamar / Lihat Website Resmi →
+                   </a>
+                 )}
                </div>
              </div>
            ))}
