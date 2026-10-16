@@ -1,7 +1,23 @@
-import { ArrowLeft, Calendar } from "lucide-react"
-import Link from "next/link"
+// src/app/study/conference/page.tsx
+// Mengambil data dari tabel `conference` di Supabase, lalu menyerahkannya ke ConferenceList (yang punya filter).
+// Edit data lewat Table Editor Supabase, bukan di file ini.
+// Env: NEXT_PUBLIC_SUPABASE_URL dan NEXT_PUBLIC_SUPABASE_ANON_KEY.
+// Kalau project sudah punya client Supabase (mis. src/lib/supabase.ts), ganti createClient di bawah dengan import itu.
 
-export default function ConferencePage() {
+import { ArrowLeft } from "lucide-react"
+import Link from "next/link"
+import { createClient } from "@supabase/supabase-js"
+import ConferenceList, { type Row } from "./ConferenceList"
+
+export const revalidate = 600 // data diambil ulang maksimal tiap 10 menit
+
+export default async function ConferencePage() {
+  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
+  const { data, error } = await supabase.from("conference").select("*").order("tanggal_mulai", { ascending: true })
+
+  const today = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Jakarta" })
+  const rows = (data ?? []) as Row[]
+
   return (
     <div className="min-h-screen bg-[#FDFBF7] text-gray-800 font-sans">
       <header className="sticky top-0 z-50 w-full border-b border-white/60 bg-white/60 backdrop-blur-xl">
@@ -11,20 +27,23 @@ export default function ConferencePage() {
           </Link>
         </div>
       </header>
+
       <main className="container mx-auto max-w-5xl px-4 py-12">
-        <h1 className="text-3xl font-extrabold mb-8">Jadwal Conference & Seminar</h1>
-        <div className="space-y-4">
-           {/* Template Card Conference */}
-           <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col md:flex-row justify-between md:items-center gap-4">
-             <div>
-               <h3 className="font-bold text-lg text-blue-800">IEEE International Conference on Technology 2027</h3>
-               <p className="text-sm text-gray-600 mt-1">Penyelenggara: UNDIP Semarang</p>
-             </div>
-             <div className="flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-2 rounded-xl font-bold text-sm">
-               <Calendar className="w-4 h-4"/> Deadline: 30 Nov 2026
-             </div>
-           </div>
-        </div>
+        <h1 className="text-3xl font-extrabold mb-2">Jadwal Conference & Seminar</h1>
+        <p className="text-gray-600 mb-8">
+          Tenggat dan biaya bisa berubah, jadi selalu cek situs resminya sebelum mendaftar.
+        </p>
+
+        {error && (
+          <p className="mb-6 rounded-xl bg-red-50 p-4 text-sm text-red-700">
+            Data belum bisa dimuat: {error.message}. Cek env Supabase dan policy baca tabel conference.
+          </p>
+        )}
+        {!error && rows.length === 0 ? (
+          <p className="text-gray-500">Belum ada data conference.</p>
+        ) : (
+          <ConferenceList rows={rows} today={today} />
+        )}
       </main>
     </div>
   )
