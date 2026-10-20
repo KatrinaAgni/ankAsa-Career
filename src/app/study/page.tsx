@@ -1,9 +1,9 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { 
-  ArrowLeft, PenTool, Globe, BookOpen, 
-  FileText, Sparkles, UploadCloud, Calendar, Filter, Lock, PanelLeftClose, PanelLeftOpen
+import {
+  ArrowLeft, PenTool, Globe, BookOpen,
+  FileText, Sparkles, UploadCloud, Calendar, Filter, Lock, PanelLeftClose, PanelLeftOpen, Library
 } from "lucide-react"
 import Link from "next/link"
 import { supabase } from "@/lib/supabase" // Pastikan Supabase terhubung
@@ -70,6 +70,9 @@ export default function StudyPage() {
               <button onClick={() => setActiveMenu("katalog")} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all ${activeMenu === "katalog" ? "bg-rose-600 text-white shadow-md" : "text-gray-600 hover:bg-white"}`}>
                 <BookOpen className="w-5 h-5" /> Katalog E-book
               </button>
+              <Link href="/study/catalog" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all text-gray-600 hover:bg-white">
+                <Library className="w-5 h-5" /> Perpustakaan & Request
+              </Link>
               <button onClick={() => setActiveMenu("rangkuman_ai")} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all ${activeMenu === "rangkuman_ai" ? "bg-rose-600 text-white shadow-md" : "text-gray-600 hover:bg-white"}`}>
                 <Sparkles className="w-5 h-5" /> Rangkuman AI
               </button>
@@ -93,7 +96,12 @@ export default function StudyPage() {
             
             {activeMenu === "katalog" && (
               <div className="animate-in fade-in duration-300">
-                <h2 className="text-2xl font-extrabold mb-6">Katalog E-Book Ankasa</h2>
+                <div className="flex flex-wrap justify-between items-center gap-3 mb-6">
+                  <h2 className="text-2xl font-extrabold">Katalog E-Book Ankasa</h2>
+                  <Link href="/study/catalog" className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold px-4 py-2 rounded-xl transition-colors">
+                    <Library className="w-4 h-4" /> Perpustakaan & Request Buku
+                  </Link>
+                </div>
                 
                 <div className="space-y-8">
                   {ebooks.length === 0 ? (
