@@ -64,6 +64,17 @@ node_modules/
 
 # dotenv environment variables file
 .env
+.env*.local
+.env.local
+.env.seed
 
 # dataconnect generated files
 .dataconnect
+
+# Next.js build output
+.next/
+out/
+
+# TypeScript build info
+tsconfig.tsbuildinfo
+*.tsbuildinfo
