@@ -13,7 +13,10 @@ import {
   Phone,
   ChevronDown,
   Search,
-  LayoutTemplate
+  LayoutTemplate,
+  User,
+  LogIn,
+  MessageCircle
 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
@@ -27,11 +30,11 @@ export default function Home() {
       <div className="absolute top-[40%] right-[-5%] w-[40vw] h-[40vw] bg-[#D6C5B3] rounded-full mix-blend-multiply filter blur-[120px] opacity-40 pointer-events-none"></div>
       <div className="absolute bottom-[-10%] left-[20%] w-[60vw] h-[60vw] bg-[#F4EBE1] rounded-full mix-blend-multiply filter blur-[120px] opacity-60 pointer-events-none"></div>
 
-      {/* HEADER - Glassmorphism dengan Dropdown */}
+      {/* HEADER - Menu Bar Lengkap Sesuai Permintaan */}
       <header className="sticky top-0 z-50 w-full border-b border-white/60 bg-white/60 backdrop-blur-xl shadow-[0_4px_30px_rgba(0,0,0,0.03)]">
         <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
           <Link href="/" className="flex items-center space-x-3 group">
-            {/* LOGO: A Silver Gelap, Lintasan Silver Gelap, Bintang Putih Cerah */}
+            {/* LOGO KIRI ATAS */}
             <div className="relative flex items-center justify-center w-11 h-11 bg-[#2D2D2D] rounded-xl shadow-md overflow-hidden group-hover:scale-105 transition-transform">
               <span className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-b from-gray-400 to-gray-600 z-10 relative top-[1px]">
                 A
@@ -44,48 +47,34 @@ export default function Home() {
             </span>
           </Link>
           
-          <nav className="hidden md:flex gap-8 text-sm font-medium text-gray-600 items-center">
-            <a href="#about" className="hover:text-gray-900 transition-colors">Tentang Kami</a>
+          <nav className="hidden md:flex gap-6 text-sm font-bold text-gray-600 items-center">
+            <Link href="/" className="text-gray-900 transition-colors">Home</Link>
+            <Link href="/tentang" className="hover:text-gray-900 transition-colors">Tentang Kami</Link>
+            <Link href="/study" className="hover:text-gray-900 transition-colors">Ankasa Study</Link>
+            <Link href="/career" className="hover:text-gray-900 transition-colors">Ankasa Career</Link>
+            <Link href="/harga" className="hover:text-gray-900 transition-colors">Harga</Link>
+            <Link href="/profil" className="hover:text-gray-900 transition-colors flex items-center gap-1"><User className="w-4 h-4"/> Profil</Link>
             
-            {/* DROPDOWN MENU LAYANAN */}
-            <div className="relative group inline-block">
-              <button className="flex items-center gap-1 hover:text-gray-900 transition-colors py-2">
-                Layanan <ChevronDown className="w-4 h-4 group-hover:rotate-180 transition-transform duration-300" />
-              </button>
-              
-              {/* Isi Dropdown mengarah ke halaman spesifik */}
-              <div className="absolute left-1/2 -translate-x-1/2 mt-0 w-56 rounded-2xl bg-white/90 backdrop-blur-xl border border-white/80 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top translate-y-2 group-hover:translate-y-0 p-2 z-50">
-                <div className="space-y-1">
-                  <Link href="/career" className="flex items-start gap-3 p-3 rounded-xl hover:bg-blue-50 transition-colors group/item">
-                    <div className="bg-blue-100 p-1.5 rounded-lg text-blue-700 group-hover/item:bg-blue-600 group-hover/item:text-white transition-colors">
-                      <Briefcase className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <div className="font-bold text-gray-900 text-sm">Ankasa Career</div>
-                      <div className="text-[10px] text-gray-500 mt-0.5">Loker, CV AI & Portofolio</div>
-                    </div>
-                  </Link>
-                  <Link href="/study" className="flex items-start gap-3 p-3 rounded-xl hover:bg-rose-50 transition-colors group/item">
-                    <div className="bg-rose-100 p-1.5 rounded-lg text-rose-700 group-hover/item:bg-rose-600 group-hover/item:text-white transition-colors">
-                      <GraduationCap className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <div className="font-bold text-gray-900 text-sm">Ankasa Study</div>
-                      <div className="text-[10px] text-gray-500 mt-0.5">Materi, Desain & Template</div>
-                    </div>
-                  </Link>
-                </div>
-              </div>
-            </div>
+            <div className="w-px h-5 bg-gray-300 mx-1"></div>
+            
+            <Link href="/login" className="flex items-center gap-1 bg-gray-900 text-white px-4 py-2 rounded-full hover:bg-gray-800 transition-colors shadow-sm"><LogIn className="w-4 h-4"/> Masuk</Link>
           </nav>
         </div>
       </header>
 
       <main className="flex-grow relative z-10">
         
-        {/* HERO SECTION */}
-        <section className="relative py-20 md:py-32 px-4" id="about">
-          <div className="container mx-auto max-w-5xl text-center">
+        {/* HERO SECTION - Kotak besar dihapus, diganti Logo */}
+        <section className="relative py-20 md:py-32 px-4" id="home">
+          <div className="container mx-auto max-w-5xl text-center flex flex-col items-center">
+            
+            {/* Tempat Logo Gambar Kamu (Menggantikan Kotak Besar ankasa.jpg) */}
+            <div className="relative w-28 h-28 md:w-32 md:h-32 mb-6 rounded-3xl shadow-xl overflow-hidden bg-white border border-gray-100 flex items-center justify-center transform hover:scale-105 transition-transform duration-300">
+              {/* Jika sudah punya file gambar logo, masukkan ke folder public (misal public/logo.png) dan hapus tanda komentar di bawah ini: */}
+              {/* <Image src="/logo.png" alt="Logo Ankasa" fill className="object-cover" /> */}
+              <div className="text-4xl font-black text-gray-900">A</div>
+            </div>
+
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/60 backdrop-blur-md border border-white/80 shadow-sm text-sm font-semibold text-gray-700 mb-6">
               <Sparkles className="w-4 h-4 text-amber-600" />
               <span>Satu Platform untuk Edukasi & Karier</span>
@@ -99,26 +88,10 @@ export default function Home() {
             <p className="text-lg md:text-xl text-gray-600 mb-10 max-w-3xl mx-auto leading-relaxed font-medium">
               Platform digital terdepan yang mendampingi mahasiswa Indonesia melintasi orbit pertumbuhannya dari bangku kuliah hingga siap bersinar di dunia kerja.
             </p>
-
-            <div className="relative w-full h-72 md:h-96 rounded-[2rem] overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.08)] border-4 border-white/60">
-              <Image 
-                src="/ankasa.jpg"
-                alt="Tim ankAsa" 
-                layout="fill"
-                objectFit="cover"
-                className="hover:scale-105 transition-transform duration-700"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex items-end p-8 md:p-12">
-                <div className="text-left">
-                  <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">Mulai Orbitmu Sekarang.</h2>
-                  <p className="text-gray-200 font-medium">Temukan arah, kembangkan potensi, dan ambil langkah nyata.</p>
-                </div>
-              </div>
-            </div>
           </div>
         </section>
 
-        {/* SECTION: ANKASA CAREER */}
+        {/* SECTION: ANKASA CAREER (Tidak diubah, tetap keren seperti aslimu) */}
         <section id="ankasa-career" className="py-24 px-4 bg-white/30 backdrop-blur-sm border-y border-white/50 scroll-mt-16">
           <div className="container mx-auto max-w-6xl">
             <div className="flex flex-col md:flex-row items-center gap-12">
@@ -197,7 +170,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* SECTION: ANKASA STUDY */}
+        {/* SECTION: ANKASA STUDY (Tidak diubah, tetap keren seperti aslimu) */}
         <section id="ankasa-study" className="py-24 px-4 scroll-mt-16">
           <div className="container mx-auto max-w-6xl">
             <div className="flex flex-col-reverse md:flex-row items-center gap-12">
@@ -330,6 +303,19 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {/* FLOATING WA BOT BUTTON */}
+      <a 
+        href="https://wa.me/6282112345678?text=Halo%20Admin%20Ankasa%20Hub,%20saya%20ingin%20bertanya%20mengenai%20layanan%20platform%20ini." 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        className="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-2xl hover:bg-green-600 hover:scale-110 transition-all z-50 flex items-center justify-center group"
+      >
+         <MessageCircle className="w-7 h-7" />
+         <span className="absolute right-16 bg-white text-gray-800 text-xs font-bold px-3 py-2 rounded-xl shadow-md opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+           Chat Bot WhatsApp (Auto-Reply)
+         </span>
+      </a>
     </div>
   )
 }
