@@ -30,16 +30,16 @@ export default function LoginPage() {
       return
     }
 
-    // 2. Cek Role dari tabel profiles (opsional, jika tabel profiles sudah ada)
+    // 2. Cek tipe_akun dari tabel users (opsional, jika tabel users sudah ada)
     if (authData.user) {
       const { data: profile } = await supabase
-        .from('profiles')
-        .select('role')
+        .from('users')
+        .select('tipe_akun')
         .eq('id', authData.user.id)
         .single()
 
-      // 3. Arahkan halaman sesuai role
-      if (profile?.role === 'admin') {
+      // 3. Arahkan halaman sesuai tipe_akun
+      if (profile?.tipe_akun === 'admin') {
         router.push("/admin")
       } else {
         router.push("/profil") // Halaman profil standar

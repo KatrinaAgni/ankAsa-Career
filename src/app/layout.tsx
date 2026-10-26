@@ -5,6 +5,9 @@ import { Toaster } from "@/components/ui/toaster";
 export const metadata: Metadata = {
   title: 'ankAsa Career Hub',
   description: 'Your one-stop solution for career advancement.',
+  icons: {
+    icon: "/icon.jpeg",
+  },
 };
 
 export default function RootLayout({

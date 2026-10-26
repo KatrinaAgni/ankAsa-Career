@@ -29,7 +29,7 @@ export default function HargaPage() {
               <li className="flex gap-2 text-sm text-gray-600"><Check className="w-5 h-5 text-blue-600 shrink-0"/> Analisis ATS Score Premium</li>
               <li className="flex gap-2 text-sm text-gray-600"><Check className="w-5 h-5 text-blue-600 shrink-0"/> Prioritas Jasa Arsip Digital</li>
             </ul>
-            <a href="https://wa.me/6282112345678" target="_blank" className="w-full block text-center bg-blue-50 text-blue-700 font-bold py-3 rounded-xl hover:bg-blue-100">Pilih Career Pro</a>
+            <a href="https://wa.me/6285848953387" target="_blank" className="w-full block text-center bg-blue-50 text-blue-700 font-bold py-3 rounded-xl hover:bg-blue-100">Pilih Career Pro</a>
           </div>
 
           {/* Paket Bundling (Unggulan) */}
@@ -45,7 +45,7 @@ export default function HargaPage() {
               <li className="flex gap-2 text-sm text-gray-300"><Check className="w-5 h-5 text-amber-400 shrink-0"/> Konsultasi Publikasi 1-on-1</li>
               <li className="flex gap-2 text-sm text-gray-300"><Check className="w-5 h-5 text-amber-400 shrink-0"/> Lencana Khusus di Profil</li>
             </ul>
-            <a href="https://wa.me/6282112345678" target="_blank" className="w-full block text-center bg-amber-500 text-gray-900 font-bold py-3 rounded-xl hover:bg-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.4)]">Beli Paket Bundling</a>
+            <a href="https://wa.me/6285848953387" target="_blank" className="w-full block text-center bg-amber-500 text-gray-900 font-bold py-3 rounded-xl hover:bg-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.4)]">Beli Paket Bundling</a>
           </div>
 
           {/* Paket Study Pro */}
@@ -57,7 +57,7 @@ export default function HargaPage() {
               <li className="flex gap-2 text-sm text-gray-600"><Check className="w-5 h-5 text-rose-600 shrink-0"/> Akses Semua Template Dokumen</li>
               <li className="flex gap-2 text-sm text-gray-600"><Check className="w-5 h-5 text-rose-600 shrink-0"/> Diskon Jasa Desain 15%</li>
             </ul>
-            <a href="https://wa.me/6282112345678" target="_blank" className="w-full block text-center bg-rose-50 text-rose-700 font-bold py-3 rounded-xl hover:bg-rose-100">Pilih Study Pro</a>
+            <a href="https://wa.me/6285848953387" target="_blank" className="w-full block text-center bg-rose-50 text-rose-700 font-bold py-3 rounded-xl hover:bg-rose-100">Pilih Study Pro</a>
           </div>
 
         </div>

@@ -1,8 +1,5 @@
 "use client"
 
-// src/app/study/conference/ConferenceList.tsx
-// Daftar conference + filter (cari, status, lokasi, topik, tenggat). Datanya dikirim dari page.tsx.
-
 import { useMemo, useState } from "react"
 import { Calendar, CalendarPlus, ExternalLink, MapPin, Search, X } from "lucide-react"
 
@@ -47,7 +44,7 @@ const mapsUrl = (l: string) =>
 
 const kalenderUrl = (c: Row) => {
   const d = new Date(endOf(c) + "T00:00:00Z")
-  d.setUTCDate(d.getUTCDate() + 1) // tanggal akhir di Google Calendar bersifat eksklusif
+  d.setUTCDate(d.getUTCDate() + 1)
   const s = c.tanggal_mulai.replace(/-/g, "")
   const e = d.toISOString().slice(0, 10).replace(/-/g, "")
   const p = new URLSearchParams({
@@ -64,9 +61,9 @@ function ConferenceCard({ c, today }: { c: Row; today: string }) {
   const st = statusOf(c, today)
   const badge =
     st === "akan"
-      ? { t: `${daysBetween(today, c.tanggal_mulai)} hari lagi`, cls: "bg-emerald-50 text-emerald-700" }
+      ? { t: `${daysBetween(today, c.tanggal_mulai)} hari lagi`, cls: "bg-emerald-50 text-emerald-700 border border-emerald-200" }
       : st === "berlangsung"
-        ? { t: "Sedang berlangsung", cls: "bg-amber-50 text-amber-700" }
+        ? { t: "Sedang berlangsung", cls: "bg-amber-50 text-amber-700 border border-amber-200" }
         : { t: "Selesai", cls: "bg-gray-100 text-gray-500" }
 
   const dl = c.deadline_daftar
@@ -74,38 +71,38 @@ function ConferenceCard({ c, today }: { c: Row; today: string }) {
   const dlText = dl ? (isIso(dl) ? fmt(dl) : dl) : "Cek situs resmi"
 
   return (
-    <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col md:flex-row justify-between md:items-center gap-4">
+    <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col md:flex-row justify-between md:items-center gap-4 hover:shadow-md transition-shadow">
       <div className="min-w-0">
-        <div className="flex flex-wrap items-center gap-2 mb-1">
-          <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold ${badge.cls}`}>{badge.t}</span>
-          {c.regional && <span className="text-xs font-semibold text-gray-500">{c.regional}</span>}
+        <div className="flex flex-wrap items-center gap-2 mb-1.5">
+          <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${badge.cls}`}>{badge.t}</span>
+          {c.regional && <span className="text-[10px] font-bold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">{c.regional}</span>}
           {isHybrid(c.lokasi) && (
-            <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-purple-50 text-purple-700">Hybrid</span>
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-50 text-purple-700">Hybrid</span>
           )}
         </div>
-        <h3 className="font-bold text-lg text-blue-800">{c.nama}</h3>
-        <p className="text-sm text-gray-600 mt-1 flex flex-wrap items-center gap-x-3 gap-y-1">
+        <h3 className="font-extrabold text-base text-[#004aad]">{c.nama}</h3>
+        <p className="text-xs text-gray-600 mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 font-medium">
           <span>{range(c.tanggal_mulai, endOf(c))}</span>
           {c.lokasi && (
             <a
               href={mapsUrl(c.lokasi)}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1 text-blue-700 hover:underline"
+              className="flex items-center gap-1 text-[#004aad] hover:underline font-bold"
               title="Lihat lokasi di Google Maps"
             >
-              <MapPin className="w-3.5 h-3.5" /> {cleanLokasi(c.lokasi)}
+              <MapPin className="w-3 h-3" /> {cleanLokasi(c.lokasi)}
             </a>
           )}
         </p>
-        <div className="mt-3 flex flex-wrap gap-2">
+        <div className="mt-3 flex flex-wrap gap-1.5">
           {topik(c.subjek).map((s) => (
-            <span key={s} className="bg-blue-50 text-blue-700 px-2.5 py-0.5 rounded-full text-xs">
+            <span key={s} className="bg-blue-50 text-[#004aad] px-2.5 py-0.5 rounded-md text-[10px] font-bold">
               {s}
             </span>
           ))}
           {c.indeks && (
-            <span className="bg-indigo-50 text-indigo-700 px-2.5 py-0.5 rounded-full text-xs font-semibold">
+            <span className="bg-indigo-50 text-indigo-700 px-2.5 py-0.5 rounded-md text-[10px] font-extrabold">
               {c.indeks}
             </span>
           )}
@@ -114,21 +111,20 @@ function ConferenceCard({ c, today }: { c: Row; today: string }) {
 
       <div className="flex flex-col items-stretch md:items-end gap-2 shrink-0">
         <div
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-sm ${
-            dlLewat ? "bg-gray-100 text-gray-500" : "bg-blue-50 text-blue-700"
+          className={`flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl font-bold text-xs ${
+            dlLewat ? "bg-gray-100 text-gray-500" : "bg-blue-50 text-[#004aad]"
           }`}
         >
-          <Calendar className="w-4 h-4" /> Deadline: {dlText}
-          {dlLewat && <span className="font-medium">(lewat)</span>}
+          <Calendar className="w-3.5 h-3.5" /> Deadline: {dlText}
         </div>
         {c.link_detail && (
           <a
             href={c.link_detail}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-1.5 rounded-xl bg-blue-800 px-4 py-2 text-sm font-bold text-white hover:bg-blue-900"
+            className="flex items-center justify-center gap-1.5 rounded-xl bg-[#004aad] px-4 py-2 text-xs font-bold text-white hover:bg-[#00337a] shadow-sm transition-all"
           >
-            Cari tahu lebih lanjut <ExternalLink className="w-3.5 h-3.5" />
+            Situs Resmi <ExternalLink className="w-3.5 h-3.5" />
           </a>
         )}
         {st !== "selesai" && (
@@ -136,9 +132,9 @@ function ConferenceCard({ c, today }: { c: Row; today: string }) {
             href={kalenderUrl(c)}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-1.5 text-sm font-semibold text-gray-600 hover:text-gray-900"
+            className="flex items-center justify-center gap-1 text-[11px] font-bold text-gray-500 hover:text-[#004aad] transition-colors"
           >
-            <CalendarPlus className="w-4 h-4" /> Tambah ke kalender
+            <CalendarPlus className="w-3.5 h-3.5" /> Tambah Kalender
           </a>
         )}
       </div>
@@ -154,7 +150,7 @@ const STATUS_OPTS: { v: Status; l: string }[] = [
 ]
 
 const selectCls =
-  "w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
+  "w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-xs font-semibold text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#004aad]"
 
 export default function ConferenceList({ rows, today }: { rows: Row[]; today: string }) {
   const [q, setQ] = useState("")
@@ -203,9 +199,8 @@ export default function ConferenceList({ rows, today }: { rows: Row[]; today: st
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder="Cari nama, lokasi, atau topik (mis. Bali, IEEE, AI)"
-            aria-label="Cari conference"
-            className="w-full rounded-xl border border-gray-200 py-2 pl-9 pr-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+            placeholder="Cari nama, lokasi, atau topik (misal: Semarang, IEEE, AI)..."
+            className="w-full rounded-xl border border-gray-200 py-2 pl-9 pr-3 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#004aad]"
           />
         </div>
 
@@ -215,11 +210,10 @@ export default function ConferenceList({ rows, today }: { rows: Row[]; today: st
               key={o.v}
               type="button"
               onClick={() => setStatus(o.v)}
-              aria-pressed={status === o.v}
-              className={`rounded-full border px-3.5 py-1 text-sm font-semibold transition-colors ${
+              className={`rounded-full px-3 py-1 text-xs font-bold transition-all ${
                 status === o.v
-                  ? "border-blue-800 bg-blue-800 text-white"
-                  : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50"
+                  ? "bg-[#004aad] text-white shadow-sm"
+                  : "bg-gray-50 text-gray-600 hover:bg-gray-100"
               }`}
             >
               {o.l}
@@ -228,43 +222,37 @@ export default function ConferenceList({ rows, today }: { rows: Row[]; today: st
         </div>
 
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          <select value={lok} onChange={(e) => setLok(e.target.value)} aria-label="Filter lokasi" className={selectCls}>
+          <select value={lok} onChange={(e) => setLok(e.target.value)} className={selectCls}>
             <option value="">Semua lokasi</option>
             {lokOpts.map((k) => (
-              <option key={k} value={k}>
-                {k}
-              </option>
+              <option key={k} value={k}>{k}</option>
             ))}
           </select>
-          <select value={top} onChange={(e) => setTop(e.target.value)} aria-label="Filter topik" className={selectCls}>
+          <select value={top} onChange={(e) => setTop(e.target.value)} className={selectCls}>
             <option value="">Semua topik</option>
             {topOpts.map((t) => (
-              <option key={t} value={t}>
-                {t}
-              </option>
+              <option key={t} value={t}>{t}</option>
             ))}
           </select>
-          <label className="flex items-center gap-2 rounded-xl border border-gray-200 px-3 py-2 text-sm text-gray-700 cursor-pointer">
-            <input type="checkbox" checked={buka} onChange={(e) => setBuka(e.target.checked)} className="accent-blue-800" />
-            Hanya yang tenggatnya masih buka
+          <label className="flex items-center gap-2 rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-xs font-bold text-gray-700 cursor-pointer">
+            <input type="checkbox" checked={buka} onChange={(e) => setBuka(e.target.checked)} className="accent-[#004aad]" />
+            Tenggat masih buka
           </label>
         </div>
 
-        <div className="flex items-center justify-between text-sm text-gray-500">
-          <span>
-            {filtered.length} dari {rows.length} conference
-          </span>
+        <div className="flex items-center justify-between text-xs font-medium text-gray-500 pt-1">
+          <span>{filtered.length} dari {rows.length} conference</span>
           {adaFilter && (
-            <button type="button" onClick={reset} className="flex items-center gap-1 font-semibold text-blue-800 hover:underline">
-              <X className="w-4 h-4" /> Reset filter
+            <button type="button" onClick={reset} className="flex items-center gap-1 font-bold text-[#004aad] hover:underline">
+              <X className="w-3.5 h-3.5" /> Reset filter
             </button>
           )}
         </div>
       </div>
 
       {filtered.length === 0 && (
-        <p className="rounded-xl bg-white border border-gray-100 p-6 text-center text-gray-500">
-          Tidak ada conference yang cocok. Coba ubah atau reset filternya.
+        <p className="rounded-2xl bg-white border border-gray-100 p-8 text-center text-xs font-medium text-gray-400">
+          Tidak ada conference yang sesuai. Coba ubah atau reset filter.
         </p>
       )}
 
@@ -278,8 +266,8 @@ export default function ConferenceList({ rows, today }: { rows: Row[]; today: st
 
       {lewat.length > 0 && (
         <>
-          <h2 className="text-xl font-bold mt-12 mb-4 text-gray-500">Sudah selesai</h2>
-          <div className="space-y-4 opacity-70">
+          <h2 className="text-base font-extrabold mt-10 mb-4 text-gray-400 uppercase tracking-wider">Sudah Selesai</h2>
+          <div className="space-y-4 opacity-60">
             {lewat.map((c) => (
               <ConferenceCard key={c.id} c={c} today={today} />
             ))}

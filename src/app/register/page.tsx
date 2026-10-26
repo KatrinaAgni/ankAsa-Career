@@ -6,6 +6,7 @@ import { supabase } from "@/lib/supabase"
 import { useRouter } from "next/navigation"
 
 export default function RegisterPage() {
+  const [nama, setNama] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
@@ -16,14 +17,40 @@ export default function RegisterPage() {
     e.preventDefault()
     setLoading(true)
     setMsg("")
-    const { data, error } = await supabase.auth.signUp({ email, password })
     
-    if (error) {
-      setMsg(error.message)
-    } else {
-      setMsg("Berhasil! Silakan cek email Anda untuk verifikasi (atau langsung login jika tidak butuh verifikasi).")
-      setTimeout(() => router.push("/login"), 3000)
+    // 1. Daftar ke sistem Autentikasi Supabase
+    const { data: authData, error: authError } = await supabase.auth.signUp({ 
+      email, 
+      password 
+    })
+    
+    if (authError) {
+      setMsg(authError.message)
+      setLoading(false)
+      return
     }
+
+    // 2. Simpan data profil ke tabel 'users' sesuai skema database
+    if (authData.user) {
+      const { error: dbError } = await supabase
+        .from('users')
+        .insert([
+          { 
+            id: authData.user.id, 
+            nama_lengkap: nama,
+            email: email,
+            tipe_akun: 'user' // Default role untuk pendaftar baru
+          }
+        ])
+
+      if (dbError) {
+        setMsg("Akun terbuat, tapi gagal menyimpan profil: " + dbError.message)
+      } else {
+        setMsg("Berhasil! Silakan cek email Anda untuk verifikasi (atau langsung login jika tidak butuh verifikasi).")
+        setTimeout(() => router.push("/login"), 3000)
+      }
+    }
+    
     setLoading(false)
   }
 
@@ -43,12 +70,16 @@ export default function RegisterPage() {
 
         <form onSubmit={handleRegister} className="space-y-4">
           <div>
+            <label className="block text-xs font-bold text-gray-700 mb-1 uppercase">Nama Lengkap</label>
+            <input type="text" required value={nama} onChange={(e)=>setNama(e.target.value)} className="w-full bg-gray-50 border p-3 rounded-xl text-sm" placeholder="Ketik nama Anda" />
+          </div>
+          <div>
             <label className="block text-xs font-bold text-gray-700 mb-1 uppercase">Email</label>
-            <input type="email" required value={email} onChange={(e)=>setEmail(e.target.value)} className="w-full bg-gray-50 border p-3 rounded-xl text-sm" />
+            <input type="email" required value={email} onChange={(e)=>setEmail(e.target.value)} className="w-full bg-gray-50 border p-3 rounded-xl text-sm" placeholder="nama@email.com" />
           </div>
           <div>
             <label className="block text-xs font-bold text-gray-700 mb-1 uppercase">Kata Sandi</label>
-            <input type="password" required value={password} onChange={(e)=>setPassword(e.target.value)} className="w-full bg-gray-50 border p-3 rounded-xl text-sm" />
+            <input type="password" required value={password} onChange={(e)=>setPassword(e.target.value)} className="w-full bg-gray-50 border p-3 rounded-xl text-sm" placeholder="••••••••" />
           </div>
           <button disabled={loading} type="submit" className="w-full bg-gray-900 text-white font-bold py-3 rounded-xl shadow-md">
             {loading ? "Memproses..." : "Daftar Sekarang"}
