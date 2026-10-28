@@ -1,19 +1,21 @@
 // src/app/study/conference/page.tsx
-// Mengambil data dari tabel `conference` di Supabase, lalu menyerahkannya ke ConferenceList (yang punya filter).
-// Edit data lewat Table Editor Supabase, bukan di file ini.
-// Env: NEXT_PUBLIC_SUPABASE_URL dan NEXT_PUBLIC_SUPABASE_ANON_KEY.
-// Kalau project sudah punya client Supabase (mis. src/lib/supabase.ts), ganti createClient di bawah dengan import itu.
+// Menampilkan conference yang sudah dipublikasikan. Data dikelola lewat /study/conference/manage.
 
 import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import { createClient } from "@supabase/supabase-js"
+import AdminShortcut from "./AdminShortcut"
 import ConferenceList, { type Row } from "./ConferenceList"
 
-export const revalidate = 600 // data diambil ulang maksimal tiap 10 menit
+export const dynamic = "force-dynamic"
 
 export default async function ConferencePage() {
   const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
-  const { data, error } = await supabase.from("conference").select("*").order("tanggal_mulai", { ascending: true })
+  const { data, error } = await supabase
+    .from("conference")
+    .select("*")
+    .eq("status", "published")
+    .order("tanggal_mulai", { ascending: true })
 
   const today = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Jakarta" })
   const rows = (data ?? []) as Row[]
@@ -29,10 +31,15 @@ export default async function ConferencePage() {
       </header>
 
       <main className="container mx-auto max-w-5xl px-4 py-12">
-        <h1 className="text-3xl font-extrabold mb-2">Jadwal Conference & Seminar</h1>
-        <p className="text-gray-600 mb-8">
-          Tenggat dan biaya bisa berubah, jadi selalu cek situs resminya sebelum mendaftar.
-        </p>
+        <div className="mb-8 flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-extrabold mb-2">Jadwal Conference & Seminar</h1>
+            <p className="text-gray-600">
+              Tenggat dan biaya bisa berubah, jadi selalu cek situs resminya sebelum mendaftar.
+            </p>
+          </div>
+          <AdminShortcut />
+        </div>
 
         {error && (
           <p className="mb-6 rounded-xl bg-red-50 p-4 text-sm text-red-700">

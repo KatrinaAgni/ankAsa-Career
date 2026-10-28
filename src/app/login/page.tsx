@@ -1,7 +1,35 @@
-import { ArrowLeft, Sparkles } from "lucide-react"
+"use client"
+
+import { useState, type FormEvent } from "react"
+import { useRouter } from "next/navigation"
+import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
+import { supabase } from "@/lib/supabase"
 
 export default function LoginPage() {
+  const router = useRouter()
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
+
+  const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setError(null)
+    setLoading(true)
+
+    const { error } = await supabase.auth.signInWithPassword({ email, password })
+
+    if (error) {
+      setError(error.message)
+      setLoading(false)
+      return
+    }
+
+    router.push("/study")
+    router.refresh()
+  }
+
   return (
     <div className="min-h-screen bg-[#FDFBF7] text-gray-800 flex flex-col justify-center items-center p-4 relative">
       <div className="absolute top-8 left-8">
@@ -17,17 +45,42 @@ export default function LoginPage() {
           <p className="text-xs text-gray-500 mt-1">Satu akun untuk Career & Study</p>
         </div>
 
-        <form className="space-y-4">
+        <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wider">Email Akademik / Pribadi</label>
-            <input type="email" placeholder="nama@email.com" className="w-full bg-gray-50 border border-gray-200 p-3 rounded-xl text-sm outline-none focus:border-blue-500" />
+            <label htmlFor="email" className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wider">Email Akademik / Pribadi</label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="nama@email.com"
+              autoComplete="email"
+              required
+              className="w-full bg-gray-50 border border-gray-200 p-3 rounded-xl text-sm outline-none focus:border-blue-500"
+            />
           </div>
           <div>
-            <label className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wider">Kata Sandi</label>
-            <input type="password" placeholder="••••••••" className="w-full bg-gray-50 border border-gray-200 p-3 rounded-xl text-sm outline-none focus:border-blue-500" />
+            <label htmlFor="password" className="block text-xs font-bold text-gray-700 mb-1 uppercase tracking-wider">Kata Sandi</label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+              autoComplete="current-password"
+              required
+              className="w-full bg-gray-50 border border-gray-200 p-3 rounded-xl text-sm outline-none focus:border-blue-500"
+            />
           </div>
-          <button type="button" className="w-full bg-gray-900 text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition-colors shadow-md">
-            Masuk Sekarang
+          {error && (
+            <p className="text-xs text-red-600 bg-red-50 border border-red-100 p-3 rounded-xl">{error}</p>
+          )}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-gray-900 text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition-colors shadow-md disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            {loading ? "Memproses..." : "Masuk Sekarang"}
           </button>
         </form>
 

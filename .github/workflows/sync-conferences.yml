@@ -1,0 +1,19 @@
+name: Sync Conferences
+
+on:
+  schedule:
+    - cron: "0 17 * * *"
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger conference sync
+        run: |
+          BASE_URL="${APP_URL%/}"
+          curl -fsS -X POST "${BASE_URL}/api/cron/sync-conferences" \
+            -H "Authorization: Bearer ${CRON_SECRET}"
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}

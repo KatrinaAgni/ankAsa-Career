@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { 
   ArrowLeft, PenTool, Globe, BookOpen, 
-  FileText, Sparkles, UploadCloud, Calendar, Filter, Lock, PanelLeftClose, PanelLeftOpen
+  FileText, Sparkles, UploadCloud, Lock, PanelLeftClose, PanelLeftOpen
 } from "lucide-react"
 import Link from "next/link"
 import { supabase } from "@/lib/supabase" // Pastikan Supabase terhubung
@@ -16,27 +16,14 @@ export default function StudyPage() {
 
   // State untuk database
   const [ebooks, setEbooks] = useState<any[]>([])
-  const [conferences, setConferences] = useState<any[]>([])
-
-  const [filterRegional, setFilterRegional] = useState("Semua")
-  const [filterIndeks, setFilterIndeks] = useState("Semua")
 
   useEffect(() => {
     const fetchData = async () => {
       const { data: dataEbook } = await supabase.from('ebook').select('*').order('created_at', { ascending: false });
       if (dataEbook) setEbooks(dataEbook);
-
-      const { data: dataConf } = await supabase.from('conference').select('*').order('created_at', { ascending: false });
-      if (dataConf) setConferences(dataConf);
     };
     fetchData();
   }, []);
-
-  const filteredConferences = conferences.filter(conf => {
-    const matchReg = filterRegional === "Semua" || conf.regional?.toLowerCase().includes(filterRegional.toLowerCase());
-    const matchInd = filterIndeks === "Semua" || conf.indeks?.toLowerCase().includes(filterIndeks.toLowerCase());
-    return matchReg && matchInd;
-  });
 
   return (
     <div className="min-h-screen bg-[#FDFBF7] text-gray-800 flex flex-col font-sans">
@@ -198,35 +185,24 @@ export default function StudyPage() {
 
             {activeMenu === "conference" && (
               <div className="animate-in fade-in duration-300">
-                <h2 className="text-2xl font-extrabold mb-4">Database Conference</h2>
-                
-                <div className="bg-white p-4 rounded-2xl border border-gray-200 mb-6 flex flex-wrap gap-3">
-                   <select value={filterRegional} onChange={(e) => setFilterRegional(e.target.value)} className="bg-gray-50 border border-gray-200 text-sm rounded-lg px-3 py-2 outline-none">
-                     <option value="Semua">Region (Semua)</option><option value="Indonesia">Indonesia</option><option value="Asia">Asia</option>
-                   </select>
-                   <select value={filterIndeks} onChange={(e) => setFilterIndeks(e.target.value)} className="bg-gray-50 border border-gray-200 text-sm rounded-lg px-3 py-2 outline-none">
-                     <option value="Semua">Index (Semua)</option><option value="Scopus">Scopus</option><option value="SINTA">SINTA</option>
-                   </select>
-                </div>
+                <h2 className="text-2xl font-extrabold mb-2">Info Conference</h2>
+                <p className="text-gray-500 text-sm mb-6">
+                  Jadwal, tenggat, dan lokasi conference akademik dalam satu halaman.
+                </p>
 
-                <div className="space-y-4">
-                   {conferences.length === 0 ? (
-                     <div className="text-center py-10 text-gray-500">Memuat data conference...</div>
-                   ) : filteredConferences.length === 0 ? (
-                     <div className="text-center py-10 text-gray-500">Tidak ada conference yang sesuai filter.</div>
-                   ) : (
-                     filteredConferences.map(conf => (
-                       <div key={conf.id} className="bg-white border border-gray-200 p-5 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-                         <span className="text-[10px] bg-blue-100 text-blue-800 font-bold px-2 py-1 rounded uppercase">{conf.indeks || "Conference"}</span>
-                         <h3 className="font-bold text-gray-900 text-lg mt-2 mb-1">{conf.nama}</h3>
-                         <p className="text-sm text-gray-500 mb-3">📍 {conf.lokasi}</p>
-                         <div className="flex justify-between items-center text-sm">
-                           <span className="text-rose-600 font-bold bg-rose-50 px-2 py-1 rounded">Deadline: {conf.deadline_daftar}</span>
-                           <a href={conf.link_detail || "#"} target="_blank" className="text-blue-600 font-bold hover:underline">View Details &rarr;</a>
-                         </div>
-                       </div>
-                     ))
-                   )}
+                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 rounded-2xl p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <div>
+                    <h3 className="text-lg font-bold text-blue-900">Conference & Seminar</h3>
+                    <p className="mt-1 text-sm text-blue-700/80">
+                      Lihat daftar conference terbaru, filter berdasarkan status, lokasi, topik, dan tenggat.
+                    </p>
+                  </div>
+                  <Link
+                    href="/study/conference"
+                    className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-blue-800 px-5 py-2.5 text-sm font-bold text-white hover:bg-blue-900"
+                  >
+                    <Globe className="h-4 w-4" /> Buka halaman conference
+                  </Link>
                 </div>
               </div>
             )}

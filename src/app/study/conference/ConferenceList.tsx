@@ -5,6 +5,7 @@
 
 import { useMemo, useState } from "react"
 import { Calendar, CalendarPlus, ExternalLink, MapPin, Search, X } from "lucide-react"
+import { isDeadlinePassed, isInactiveConference } from "@/lib/conference/deadline"
 
 export type Row = {
   id: number
@@ -17,6 +18,8 @@ export type Row = {
   indeks: string | null
   deadline_daftar: string | null
   link_detail: string | null
+  status?: "published" | "pending" | "archived" | null
+  created_at?: string | null
 }
 
 type Status = "semua" | "akan" | "berlangsung" | "selesai"
@@ -70,7 +73,7 @@ function ConferenceCard({ c, today }: { c: Row; today: string }) {
         : { t: "Selesai", cls: "bg-gray-100 text-gray-500" }
 
   const dl = c.deadline_daftar
-  const dlLewat = !!dl && isIso(dl) && dl < today
+  const dlLewat = isDeadlinePassed(c, today)
   const dlText = dl ? (isIso(dl) ? fmt(dl) : dl) : "Cek situs resmi"
 
   return (
@@ -81,6 +84,11 @@ function ConferenceCard({ c, today }: { c: Row; today: string }) {
           {c.regional && <span className="text-xs font-semibold text-gray-500">{c.regional}</span>}
           {isHybrid(c.lokasi) && (
             <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-purple-50 text-purple-700">Hybrid</span>
+          )}
+          {dlLewat && (
+            <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-500">
+              Tenggat lewat
+            </span>
           )}
         </div>
         <h3 className="font-bold text-lg text-blue-800">{c.nama}</h3>
@@ -184,8 +192,10 @@ export default function ConferenceList({ rows, today }: { rows: Row[]; today: st
     })
   }, [rows, q, status, lok, top, buka, today])
 
-  const aktif = filtered.filter((c) => endOf(c) >= today)
-  const lewat = filtered.filter((c) => endOf(c) < today).reverse()
+  const aktif = filtered.filter((c) => !isInactiveConference(c, today))
+  const lewat = filtered
+    .filter((c) => isInactiveConference(c, today))
+    .sort((a, b) => endOf(b).localeCompare(endOf(a)))
   const adaFilter = q || status !== "semua" || lok || top || buka
   const reset = () => {
     setQ("")
@@ -278,8 +288,8 @@ export default function ConferenceList({ rows, today }: { rows: Row[]; today: st
 
       {lewat.length > 0 && (
         <>
-          <h2 className="text-xl font-bold mt-12 mb-4 text-gray-500">Sudah selesai</h2>
-          <div className="space-y-4 opacity-70">
+          <h2 className="text-xl font-bold mt-12 mb-4 text-gray-500">Tenggat lewat / sudah selesai</h2>
+          <div className="space-y-4 opacity-60 grayscale">
             {lewat.map((c) => (
               <ConferenceCard key={c.id} c={c} today={today} />
             ))}
