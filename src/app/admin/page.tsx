@@ -6,6 +6,7 @@ import Link from "next/link";
 import {
   ArrowLeft,
   BookOpen,
+  Briefcase,
   Loader2,
   LogOut,
   ShieldCheck,
@@ -111,6 +112,19 @@ export default function AdminPage() {
             <p className="text-xs text-gray-500 mt-1 leading-relaxed">
               Tambah, edit, hapus, dan baca e-book penuh langsung dari halaman
               Ankasa Study.
+            </p>
+          </Link>
+
+          <Link
+            href="/career/jobs/manage"
+            className="group bg-white border border-gray-100 p-6 rounded-3xl shadow-sm hover:shadow-md hover:border-[#004aad]/30 transition-all"
+          >
+            <div className="p-3 bg-amber-50 text-amber-600 w-fit rounded-2xl mb-4 group-hover:scale-110 transition-transform">
+              <Briefcase className="w-6 h-6" />
+            </div>
+            <h2 className="font-extrabold text-gray-900">Kelola Loker</h2>
+            <p className="text-xs text-gray-500 mt-1 leading-relaxed">
+              Tambah, edit, dan hapus lowongan kerja atau MBKM di Portal Loker.
             </p>
           </Link>
 
