@@ -18,39 +18,23 @@ export default function RegisterPage() {
     setLoading(true)
     setMsg("")
     
-    // 1. Daftar ke sistem Autentikasi Supabase
-    const { data: authData, error: authError } = await supabase.auth.signUp({ 
-      email, 
-      password 
+    // 1. Daftar ke sistem Autentikasi Supabase.
+    //    Profil di tabel users dibuat otomatis oleh trigger public.handle_new_user().
+    const { error: authError } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { data: { nama_lengkap: nama } },
     })
-    
+
     if (authError) {
       setMsg(authError.message)
       setLoading(false)
       return
     }
 
-    // 2. Simpan data profil ke tabel 'users' sesuai skema database
-    if (authData.user) {
-      const { error: dbError } = await supabase
-        .from('users')
-        .insert([
-          { 
-            id: authData.user.id, 
-            nama_lengkap: nama,
-            email: email,
-            tipe_akun: 'user' // Default role untuk pendaftar baru
-          }
-        ])
+    setMsg("Berhasil! Silakan cek email Anda untuk verifikasi (atau langsung login jika tidak butuh verifikasi).")
+    setTimeout(() => router.push("/login"), 3000)
 
-      if (dbError) {
-        setMsg("Akun terbuat, tapi gagal menyimpan profil: " + dbError.message)
-      } else {
-        setMsg("Berhasil! Silakan cek email Anda untuk verifikasi (atau langsung login jika tidak butuh verifikasi).")
-        setTimeout(() => router.push("/login"), 3000)
-      }
-    }
-    
     setLoading(false)
   }
 

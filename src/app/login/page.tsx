@@ -5,6 +5,7 @@ import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { supabase } from "@/lib/supabase"
+import { getSessionProfile } from "@/lib/auth"
 
 export default function LoginPage() {
   const router = useRouter()
@@ -30,19 +31,15 @@ export default function LoginPage() {
       return
     }
 
-    // 2. Cek tipe_akun dari tabel users (opsional, jika tabel users sudah ada)
+    // 2. Baca role lewat server agar tidak terblokir RLS tabel users
     if (authData.user) {
-      const { data: profile } = await supabase
-        .from('users')
-        .select('tipe_akun')
-        .eq('id', authData.user.id)
-        .single()
+      const { isAdmin } = await getSessionProfile()
 
       // 3. Arahkan halaman sesuai tipe_akun
-      if (profile?.tipe_akun === 'admin') {
+      if (isAdmin) {
         router.push("/admin")
       } else {
-        router.push("/profil") // Halaman profil standar
+        router.push("/profil")
       }
     }
     
