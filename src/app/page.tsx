@@ -943,7 +943,7 @@ export default function Home() {
                   <Instagram className="h-4 w-4" /> <span>@ankasa.hub</span>
                 </a>
                 <div className="flex items-center gap-3 justify-center md:justify-start">
-                  <Phone className="h-4 w-4" /> <span>+62 858 4895 3387</span>
+                  <Phone className="h-4 w-4" /> <span>+6285848953387</span>
                 </div>
               </div>
             </div>
