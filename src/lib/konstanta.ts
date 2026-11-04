@@ -1,10 +1,8 @@
 import type { JenjangBuku, KategoriBuku } from "@/lib/types";
 
-export const NOMOR_WA = "62895359993661";
+export const NOMOR_WA = "6285848953387";
 
-export const NOMOR_WA_DISPLAY = "0895359993661";
-
-export const QRIS_IMAGE = "/qris.jpeg";
+export const NOMOR_WA_DISPLAY = "085848953387";
 
 export const KATEGORI_LIST: KategoriBuku[] = [
   "Fiksi",
@@ -42,18 +40,4 @@ export const WARNA_COVER: Record<string, string> = {
   Teknologi: "bg-blue-900",
   Bisnis: "bg-purple-900",
   "Anak & Remaja": "bg-cyan-900",
-};
-
-export const LABEL_STATUS: Record<string, string> = {
-  menunggu_bayar: "Menunggu Pembayaran",
-  diproses: "Sedang Diproses",
-  selesai: "Selesai",
-  batal: "Dibatalkan",
-};
-
-export const WARNA_STATUS: Record<string, string> = {
-  menunggu_bayar: "bg-amber-100 text-amber-700",
-  diproses: "bg-blue-100 text-blue-700",
-  selesai: "bg-emerald-100 text-emerald-700",
-  batal: "bg-gray-200 text-gray-600",
 };

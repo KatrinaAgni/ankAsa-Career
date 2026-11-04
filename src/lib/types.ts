@@ -32,27 +32,13 @@ export type Ebook = {
   created_at?: string;
 };
 
-export type StatusPesanan =
-  | "menunggu_bayar"
-  | "diproses"
-  | "selesai"
-  | "batal";
+export type TipeAkun = "admin" | "user" | "freemium";
 
-export type BookRequest = {
-  id: number;
-  kode_order: string;
-  nama_pemesan: string;
-  kontak_wa: string;
+export type UserProfile = {
+  id: string;
+  nama_lengkap: string | null;
   email: string | null;
-  jenis_buku: string;
-  jenjang: string | null;
-  judul_diinginkan: string | null;
-  deskripsi_kebutuhan: string;
-  jumlah_halaman: number | null;
-  estimasi_harga: number | null;
-  status: StatusPesanan;
-  catatan_admin: string | null;
-  created_at: string;
+  tipe_akun: TipeAkun;
 };
 
 export type CvBuilderOutput = {
