@@ -30,9 +30,11 @@ import {
   AlertCircle
 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase"; // Pastikan Supabase sudah terhubung
 
 export default function CareerPage() {
+  const router = useRouter();
   const [activeMenu, setActiveMenu] = useState("loker");
   const [selectedJob, setSelectedJob] = useState<any | null>(null);
 
@@ -340,7 +342,7 @@ export default function CareerPage() {
                       filteredLokers.map((loker) => (
                         <div
                           key={loker.id}
-                          onClick={() => setSelectedJob(loker)}
+                          onClick={() => router.push(`/career/jobs/${loker.id}`)}
                           className="bg-white p-5 border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-all cursor-pointer flex gap-4 items-center group"
                         >
                           <div className="w-12 h-12 bg-gradient-to-br from-[#004aad] to-[#5de0e6] text-white rounded-xl flex items-center justify-center font-black text-lg shrink-0 shadow-sm">
